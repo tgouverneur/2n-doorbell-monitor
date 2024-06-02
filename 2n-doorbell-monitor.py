@@ -85,7 +85,8 @@ def daemonize():
         os.dup2(f.fileno(), sys.stderr.fileno())
 
     with open(PID_FILE, 'w') as f:
-    f.write(str(os.getpid()))
+        f.write(str(os.getpid()))
+
     atexit.register(lambda: os.remove(PID_FILE))
 
 def handle_signal(signal, frame):
