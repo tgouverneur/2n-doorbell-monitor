@@ -1,0 +1,24 @@
+[DEFAULT]
+2n_base_url = https://doorbell.ach.espix.org
+2n_username = admin
+2n_password = adminpassword
+
+# Sip configuration for this script
+sip_username = 1003
+sip_password = sippassword
+sip_domain = pbx.int.thefoo.eu
+
+# From which extension the call is expected (the call from the doorbell!)
+sip_expected_from = 1000
+sip_port = 5060
+
+# This computer's IP
+sip_myip = 10.42.1.161
+
+# Telegram bot setting
+telegram_bot_token = 
+telegram_chat_id = 
+
+# Temporary files for the camera snapshot and the logfile
+image_file_path = ./snapshot.jpg
+log_file = ./doorbellMonitor.log
