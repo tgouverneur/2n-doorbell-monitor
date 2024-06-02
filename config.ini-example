@@ -7,10 +7,11 @@
 sip_username = 1003
 sip_password = sippassword
 sip_domain = pbx.int.thefoo.eu
+sip_port = 5060
 
 # From which extension the call is expected (the call from the doorbell!)
 sip_expected_from = 1000
-sip_port = 5060
+sip_myport = 5060
 
 # This computer's IP
 sip_myip = 10.42.1.161

@@ -104,6 +104,7 @@ def main(mode, config_path):
     sip_domain = config['DEFAULT']['sip_domain']
     sip_expected_from = config['DEFAULT']['sip_expected_from']
     sip_myip = config['DEFAULT']['sip_myip']
+    sip_myport = config['DEFAULT']['sip_myport']
     sip_port = int(config['DEFAULT']['sip_port'])
     BOT_TOKEN = config['DEFAULT']['telegram_bot_token']
     GROUP_CHAT_ID = config['DEFAULT']['telegram_chat_id']
@@ -119,7 +120,7 @@ def main(mode, config_path):
         logging.basicConfig(stream=sys.stdout, level=logging.INFO)
         logging.info(f"Registering SIP Extension. Hit ^C to exit.")
 
-    phone = VoIPPhone(sip_domain, sip_port, sip_username, sip_password, callCallback=answer, myIP=sip_myip, sipPort=sip_port, rtpPortLow=10000, rtpPortHigh=20000)
+    phone = VoIPPhone(sip_domain, sip_port, sip_username, sip_password, callCallback=answer, myIP=sip_myip, sipPort=sip_myport, rtpPortLow=10000, rtpPortHigh=20000)
     phone.start()
     
     while True:
