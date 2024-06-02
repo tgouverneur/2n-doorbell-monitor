@@ -7,6 +7,7 @@ Type=simple
 User=tgouverneur
 WorkingDirectory=/opt/2n-doorbell-monitor
 ExecStart=/bin/bash -c 'source /opt/2n-doorbell-monitor/venv/bin/activate && exec python 2n-doorbell-monitor.py -d'
+PIDFile=/opt/2n-doorbell-monitor/2n-doorbell-monitor.pid
 ExecStop=/bin/kill -s SIGTERM $MAINPID
 Restart=on-failure
 

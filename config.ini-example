@@ -23,3 +23,4 @@ telegram_chat_id =
 # Temporary files for the camera snapshot and the logfile
 image_file_path = ./snapshot.jpg
 log_file = ./2n-doorbell-monitor.log
+pid_file = ./2n-doorbell-monitor.pid

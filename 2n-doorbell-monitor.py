@@ -84,13 +84,17 @@ def daemonize():
         os.dup2(f.fileno(), sys.stdout.fileno())
         os.dup2(f.fileno(), sys.stderr.fileno())
 
+    with open(PID_FILE, 'w') as f:
+    f.write(str(os.getpid()))
+    atexit.register(lambda: os.remove(PID_FILE))
+
 def handle_signal(signal, frame):
     global phone
     phone.stop()
     sys.exit(0)
 
 def main(mode, config_path):
-    global phone, base_url, username, password, sip_username, sip_password, sip_domain, sip_expected_from, BOT_TOKEN, GROUP_CHAT_ID, image_file_path
+    global phone, base_url, username, password, sip_expected_from, BOT_TOKEN, GROUP_CHAT_ID, image_file_path, PID_FILE
 
     # Read configuration
     config = configparser.ConfigParser()
@@ -110,6 +114,7 @@ def main(mode, config_path):
     GROUP_CHAT_ID = config['DEFAULT']['telegram_chat_id']
     image_file_path = config['DEFAULT']['image_file_path']
     log_file = config['DEFAULT']['log_file']
+    PID_FILE = config['DEFAULT']['pid_file']
 
     if mode == 'daemon':
         daemonize()
