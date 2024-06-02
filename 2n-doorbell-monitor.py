@@ -12,6 +12,7 @@ import telegram
 from telegram import InputFile
 import asyncio
 import datetime
+import atexit
 
 urllib3.disable_warnings()
 

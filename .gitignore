@@ -1,4 +1,5 @@
 config.ini
-doorbellMonitor.log
+2n-doorbell-monitor.log
+2n-doorbell-monitor.pid
 snapshot.jpg
 venv/
