@@ -116,6 +116,7 @@ def main(mode, config_path):
         logging.basicConfig(filename=log_file, level=logging.INFO)
         signal.signal(signal.SIGINT, handle_signal)
         signal.signal(signal.SIGTERM, handle_signal)
+        logging.info(f"Registering SIP Extension.")
     else:
         logging.basicConfig(stream=sys.stdout, level=logging.INFO)
         logging.info(f"Registering SIP Extension. Hit ^C to exit.")
