@@ -139,6 +139,6 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-f', '--foreground', action='store_const', const='foreground', dest='mode', help='Run in foreground mode')
     group.add_argument('-d', '--daemon', action='store_const', const='daemon', dest='mode', help='Run in daemon mode')
-    parser.add_argument('-c', '--config', type=str, default='config.ini', help='Path to the config file')
+    parser.add_argument('-c', '--config', type=str, default='./config.ini', help='Path to the config file')
     args = parser.parse_args()
     main(args.mode, args.config)
