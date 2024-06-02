@@ -113,12 +113,12 @@ def main(mode, config_path):
 
     if mode == 'daemon':
         daemonize()
-        logging.basicConfig(filename=log_file, level=logging.INFO)
+        logging.basicConfig(filename=log_file, level=logging.INFO, force=True)
         signal.signal(signal.SIGINT, handle_signal)
         signal.signal(signal.SIGTERM, handle_signal)
         logging.info(f"Registering SIP Extension.")
     else:
-        logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+        logging.basicConfig(stream=sys.stdout, level=logging.INFO, force=True)
         logging.info(f"Registering SIP Extension. Hit ^C to exit.")
 
     phone = VoIPPhone(sip_domain, sip_port, sip_username, sip_password, callCallback=answer, myIP=sip_myip, sipPort=sip_myport, rtpPortLow=10000, rtpPortHigh=20000)
