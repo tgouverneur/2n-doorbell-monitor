@@ -52,6 +52,8 @@ def fetch_camera_snapshot(base_url, username, password):
 def answer(call):
     try:
         call_from = call.request.headers['From']['number']
+        #call.deny()
+        # ^^^-- there's a bug in PyVoIP that needs to be looked at before we can do that
         logging.info(f"[SIP] Call received from: {call_from}")
         if call_from == sip_expected_from:
             logging.info("[SIP] Trying to fetch snapshot from doorbell")
