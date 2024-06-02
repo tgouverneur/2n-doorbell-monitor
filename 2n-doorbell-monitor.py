@@ -104,7 +104,7 @@ def main(mode, config_path):
     sip_domain = config['DEFAULT']['sip_domain']
     sip_expected_from = config['DEFAULT']['sip_expected_from']
     sip_myip = config['DEFAULT']['sip_myip']
-    sip_myport = config['DEFAULT']['sip_myport']
+    sip_myport = int(config['DEFAULT']['sip_myport'])
     sip_port = int(config['DEFAULT']['sip_port'])
     BOT_TOKEN = config['DEFAULT']['telegram_bot_token']
     GROUP_CHAT_ID = config['DEFAULT']['telegram_chat_id']
