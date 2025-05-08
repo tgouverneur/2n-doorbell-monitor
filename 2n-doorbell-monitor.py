@@ -16,6 +16,21 @@ import atexit
 
 urllib3.disable_warnings()
 
+async def send_discord():
+    text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+
+    with open(image_file_path, 'rb') as image_file:
+        response = requests.post(
+            discord_hook,
+            data={"content": text_message},
+            files={"file": image_file}
+        )
+
+    if response.status_code == 204:
+        logging.info("[DC] Message and image sent successfully.")
+    else:
+        logging.info(f"[DC] Issue with sending: {response.status_code} - {response.text}")
+
 async def send_telegram():
     bot = telegram.Bot(token=BOT_TOKEN)
     text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
@@ -60,7 +75,11 @@ def answer(call):
             logging.info("[SIP] Trying to fetch snapshot from doorbell")
             fetch_camera_snapshot(base_url, username, password)
             logging.info("[SIP] Sending information to telegram")
-            asyncio.run(send_telegram())
+            if telegram_enable is True:
+                asyncio.run(send_telegram())
+            if discord_enable is True:
+                asyncio.run(send_discord())
+
     except InvalidStateError:
         pass
 
@@ -97,6 +116,7 @@ def handle_signal(signal, frame):
 
 def main(mode, config_path):
     global phone, base_url, username, password, sip_expected_from, BOT_TOKEN, GROUP_CHAT_ID, image_file_path, PID_FILE
+    global telegram_enable, discord_enable, discord_hook
 
     # Read configuration
     config = configparser.ConfigParser()
@@ -114,6 +134,9 @@ def main(mode, config_path):
     sip_port = int(config['DEFAULT']['sip_port'])
     BOT_TOKEN = config['DEFAULT']['telegram_bot_token']
     GROUP_CHAT_ID = config['DEFAULT']['telegram_chat_id']
+    telegram_enable = config['DEFAULT']['telegram_enable']
+    discord_enable = config['DEFAULT']['discord_enable']
+    discord_hook = config['DEFAULT']['discord_hook']
     image_file_path = config['DEFAULT']['image_file_path']
     log_file = config['DEFAULT']['log_file']
     PID_FILE = config['DEFAULT']['pid_file']
@@ -130,7 +153,7 @@ def main(mode, config_path):
 
     phone = VoIPPhone(sip_domain, sip_port, sip_username, sip_password, callCallback=answer, myIP=sip_myip, sipPort=sip_myport, rtpPortLow=10000, rtpPortHigh=20000)
     phone.start()
-    
+
     while True:
         signal.pause()
 

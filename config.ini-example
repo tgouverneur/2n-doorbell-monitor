@@ -17,8 +17,13 @@ sip_myport = 5060
 sip_myip = 10.42.1.161
 
 # Telegram bot setting
+telegram_enable = false
 telegram_bot_token = 
 telegram_chat_id = 
+
+# Discord web hook
+discord_enable = false
+discord_hook = 
 
 # Temporary files for the camera snapshot and the logfile
 image_file_path = ./snapshot.jpg
