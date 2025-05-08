@@ -135,8 +135,8 @@ def main(mode, config_path):
     sip_port = int(config['DEFAULT']['sip_port'])
     BOT_TOKEN = config['DEFAULT']['telegram_bot_token']
     GROUP_CHAT_ID = config['DEFAULT']['telegram_chat_id']
-    telegram_enable = config['DEFAULT']['telegram_enable']
-    discord_enable = config['DEFAULT']['discord_enable']
+    telegram_enable = config.getboolean('DEFAULT','telegram_enable')
+    discord_enable = config.getboolean('DEFAULT','discord_enable')
     discord_hook = config['DEFAULT']['discord_hook']
     image_file_path = config['DEFAULT']['image_file_path']
     log_file = config['DEFAULT']['log_file']
