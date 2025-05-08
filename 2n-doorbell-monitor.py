@@ -26,7 +26,7 @@ async def send_discord():
             files={"file": image_file}
         )
 
-    if response.status_code == 204:
+    if response.status_code == 200:
         logging.info("[DC] Message and image sent successfully.")
     else:
         logging.info(f"[DC] Issue with sending: {response.status_code} - {response.text}")
