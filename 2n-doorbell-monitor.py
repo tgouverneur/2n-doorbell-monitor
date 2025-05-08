@@ -74,10 +74,11 @@ def answer(call):
         if call_from == sip_expected_from:
             logging.info("[SIP] Trying to fetch snapshot from doorbell")
             fetch_camera_snapshot(base_url, username, password)
-            logging.info("[SIP] Sending information to telegram")
             if telegram_enable is True:
+                logging.info("[SIP] Sending information to telegram")
                 asyncio.run(send_telegram())
             if discord_enable is True:
+                logging.info("[SIP] Sending information to discord")
                 asyncio.run(send_discord())
 
     except InvalidStateError:
