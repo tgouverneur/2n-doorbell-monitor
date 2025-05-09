@@ -21,6 +21,12 @@ telegram_enable = False
 telegram_bot_token = 
 telegram_chat_id = 
 
+# Mattermost web hook
+mattermost_enable = False
+mattermost_url = 
+mattermost_token =
+mattermost_channel =
+
 # Discord web hook
 discord_enable = False
 discord_hook = 

@@ -16,6 +16,40 @@ import atexit
 
 urllib3.disable_warnings()
 
+async def send_mattermost():
+    headers = {
+        "Authorization": f"Bearer {mattermost_token}"
+    }
+
+    with open(image_file_path, 'rb') as file:
+        files = {'files': (image_file_path, file)}
+        data = {'channel_id': mattermost_channel}
+        upload_url = f"{mattermost_url}/api/v4/files"
+        upload_response = requests.post(upload_url, headers=headers, files=files, data=data)
+
+    if upload_response.status_code != 201:
+        print("File upload failed:", upload_response.text)
+        exit()
+
+    file_id = upload_response.json()['file_infos'][0]['id']
+    print("File uploaded, ID:", file_id)
+
+    text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+    post_data = {
+        "channel_id": channel_id,
+        "message": text_message,
+        "file_ids": [file_id]
+    }
+
+    post_url = f"{mattermost_url}/api/v4/posts"
+    post_response = requests.post(post_url, headers=headers, json=post_data)
+
+    if post_response.status_code == 201:
+        print("Message posted to Mattermost!")
+    else:
+        print("Failed to post message:", post_response.text)
+
+
 async def send_discord():
     text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
 
@@ -80,6 +114,9 @@ def answer(call):
             if discord_enable is True:
                 logging.info("[SIP] Sending information to discord")
                 asyncio.run(send_discord())
+            if mattermost_enable is True:
+                logging.info("[SIP] Sending information to mattermost")
+                asyncio.run(send_mattermost())
 
     except InvalidStateError:
         pass
@@ -117,7 +154,7 @@ def handle_signal(signal, frame):
 
 def main(mode, config_path):
     global phone, base_url, username, password, sip_expected_from, BOT_TOKEN, GROUP_CHAT_ID, image_file_path, PID_FILE
-    global telegram_enable, discord_enable, discord_hook
+    global telegram_enable, discord_enable, discord_hook, mattermost_enable, mattermost_url, mattermost_channel, mattermost_token
 
     # Read configuration
     config = configparser.ConfigParser()
@@ -138,6 +175,10 @@ def main(mode, config_path):
     telegram_enable = config.getboolean('DEFAULT','telegram_enable')
     discord_enable = config.getboolean('DEFAULT','discord_enable')
     discord_hook = config['DEFAULT']['discord_hook']
+    mattermost_enable = config.getboolean('DEFAULT','mattermost_enable')
+    mattermost_url = config['DEFAULT']['mattermost_url']
+    mattermost_channel = config['DEFAULT']['mattermost_channel']
+    mattermost_token = config['DEFAULT']['mattermost_token']
     image_file_path = config['DEFAULT']['image_file_path']
     log_file = config['DEFAULT']['log_file']
     PID_FILE = config['DEFAULT']['pid_file']
