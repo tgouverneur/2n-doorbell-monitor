@@ -28,11 +28,11 @@ async def send_mattermost():
         upload_response = requests.post(upload_url, headers=headers, files=files, data=data)
 
     if upload_response.status_code != 201:
-        print("File upload failed:", upload_response.text)
-        exit()
+        logging.info(f"[MM] File upload failed: {upload_response_text}")
+        return
 
     file_id = upload_response.json()['file_infos'][0]['id']
-    print("File uploaded, ID:", file_id)
+    logging.info(f"[MM] File uploaded to discord: {file_id}")
 
     text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
     post_data = {
@@ -45,9 +45,9 @@ async def send_mattermost():
     post_response = requests.post(post_url, headers=headers, json=post_data)
 
     if post_response.status_code == 201:
-        print("Message posted to Mattermost!")
+        logging.info(f"[MM] Message sent")
     else:
-        print("Failed to post message:", post_response.text)
+        logging.info(f"[MM] Message issue: {post_response.text}")
 
 
 async def send_discord():
