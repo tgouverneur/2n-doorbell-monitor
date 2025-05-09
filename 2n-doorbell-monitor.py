@@ -36,7 +36,7 @@ async def send_mattermost():
 
     text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
     post_data = {
-        "channel_id": channel_id,
+        "channel_id": mattermost_channel,
         "message": text_message,
         "file_ids": [file_id]
     }
