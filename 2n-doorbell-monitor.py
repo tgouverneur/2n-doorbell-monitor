@@ -34,7 +34,7 @@ async def send_mattermost():
     file_id = upload_response.json()['file_infos'][0]['id']
     logging.info(f"[MM] File uploaded to discord: {file_id}")
 
-    text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+    text_message = "@here Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
     post_data = {
         "channel_id": mattermost_channel,
         "message": text_message,
