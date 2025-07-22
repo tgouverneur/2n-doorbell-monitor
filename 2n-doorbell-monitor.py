@@ -28,11 +28,11 @@ async def send_mattermost():
         upload_response = requests.post(upload_url, headers=headers, files=files, data=data)
 
     if upload_response.status_code != 201:
-        logging.info(f"[MM] File upload failed: {upload_response_text}")
+        logging.info(f"[MM] File upload failed: {upload_response.text}")
         return
 
     file_id = upload_response.json()['file_infos'][0]['id']
-    logging.info(f"[MM] File uploaded to discord: {file_id}")
+    logging.info(f"[MM] File uploaded: {file_id}")
 
     text_message = "@here Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
     post_data = {
