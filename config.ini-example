@@ -29,7 +29,14 @@ mattermost_channel =
 
 # Discord web hook
 discord_enable = False
-discord_hook = 
+discord_hook =
+
+# Hirssu integration (bot)
+hirssu_enable = False
+hirssu_url = https://hirssu.espix.net
+hirssu_integration_id =
+hirssu_token =
+hirssu_channel =
 
 # Temporary files for the camera snapshot and the logfile
 image_file_path = ./snapshot.jpg
