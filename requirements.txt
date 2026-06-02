@@ -1,6 +1,6 @@
 anyio==4.4.0
 asyncio==3.4.3
-certifi==2024.6.2
+certifi==2024.7.4
 charset-normalizer==3.3.2
 configparser==7.0.0
 h11==0.14.0
