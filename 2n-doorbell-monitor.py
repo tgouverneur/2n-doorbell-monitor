@@ -54,41 +54,20 @@ async def send_hirssu():
     base = f"{hirssu_url}/api/v1/integrations/{hirssu_integration_id}"
     headers = {"X-Hirssu-Token": hirssu_token}
 
-    # 1. Presign an image upload
-    with open(image_file_path, 'rb') as image_file:
-        image_bytes = image_file.read()
-
+    # 1. Upload the image (single multipart POST)
     filename = os.path.basename(image_file_path)
-    presign_data = {
-        "filename": filename,
-        "content_type": "image/jpeg",
-        "size_bytes": len(image_bytes),
-    }
-    presign_response = requests.post(f"{base}/uploads/images/presign", headers=headers, json=presign_data)
-    if presign_response.status_code != 200:
-        logging.info(f"[HS] Presign failed: {presign_response.status_code} - {presign_response.text}")
+    with open(image_file_path, 'rb') as image_file:
+        files = {'file': (filename, image_file, 'image/jpeg')}
+        upload_response = requests.post(f"{base}/uploads/images", headers=headers, files=files)
+
+    if upload_response.status_code != 200:
+        logging.info(f"[HS] Image upload failed: {upload_response.status_code} - {upload_response.text}")
         return
 
-    presign_json = presign_response.json()
-    upload_url = presign_json['upload_url']
-    upload_id = presign_json['upload_id']
-
-    # 2. Upload the image bytes to the signed PUT URL
-    put_response = requests.put(upload_url, data=image_bytes, headers={"Content-Type": "image/jpeg"})
-    if put_response.status_code not in (200, 201, 204):
-        logging.info(f"[HS] Image upload failed: {put_response.status_code} - {put_response.text}")
-        return
-
-    # 3. Commit the upload to obtain an attachment id
-    commit_response = requests.post(f"{base}/uploads/images/commit", headers=headers, json={"upload_id": upload_id, "sha256": None})
-    if commit_response.status_code != 200:
-        logging.info(f"[HS] Commit failed: {commit_response.status_code} - {commit_response.text}")
-        return
-
-    attachment_id = commit_response.json()['id']
+    attachment_id = upload_response.json()['id']
     logging.info(f"[HS] Image uploaded: {attachment_id}")
 
-    # 4. Post the message with the attachment
+    # 2. Post the message with the attachment
     text_message = "Someone has rung the doorbell at " + datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
     post_data = {
         "content": text_message,
